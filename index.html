@@ -8,10 +8,8 @@
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 50vh; overflow-x: hidden; }
         
-        .header-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 338px; margin: 4px 0 12px 0; }
-        h1 { color: #1e3a8a; margin: 0; font-size: 20px; }
-        .btn-admin { background: none; border: none; font-size: 20px; cursor: pointer; opacity: 0.6; padding: 5px; }
-        .btn-admin:active { opacity: 1; transform: scale(1.1); }
+        .header-container { display: flex; justify-content: center; align-items: center; width: 100%; max-width: 338px; margin: 4px 0 12px 0; }
+        h1 { color: #1e3a8a; margin: 0; font-size: 20px; text-align: center; cursor: pointer; user-select: none; }
         
         /* Dólar */
         .dolar-bar { background: #f0fdf4; border: 2px solid #16a34a; padding: 10px; border-radius: 9px; width: 100%; max-width: 338px; text-align: center; margin-bottom: 14px; font-weight: bold; color: #15803d; font-size: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
@@ -30,7 +28,7 @@
         .tasa-info { text-align: center; font-size: 13px; color: #475569; margin-bottom: 12px; }
         .tasa-valor { font-size: 27px; font-weight: 900; color: #2563eb; display: block; margin-top: 2px; }
         
-        /* Bloque de Resultados (Oculto por defecto) */
+        /* Bloque de Resultados */
         .res-box { display: none; background: #f8fafc; border-left: 5px solid #1e3a8a; padding: 12px; border-radius: 8px; margin-bottom: 14px; animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -40,7 +38,7 @@
         .bold { font-weight: 800; color: #1e3a8a; font-size: 18px; }
         .green { color: #14532d; font-weight: 800; font-size: 18px; }
 
-        /* Input estilo banco */
+        /* Input */
         .input-label { display: block; text-align: center; font-size: 12px; color: #64748b; font-weight: bold; margin-bottom: 6px; }
         .input-box { width: 100%; padding: 13px; border: 2px solid #2563eb; border-radius: 9px; font-size: 25px; font-weight: bold; text-align: center; color: #1e3a8a; background: #ffffff; }
         .input-box:focus { outline: none; border-color: #1d4ed8; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
@@ -59,8 +57,8 @@
 <body>
 
 <div class="header-container">
-    <h1>Transferencias Rivera</h1>
-    <button class="btn-admin" onclick="abrirAdmin()" title="Cambiar tasas">⚙️</button>
+    <!-- Al hacer clic en el título se solicitará la clave secreta -->
+    <h1 onclick="pedirClave()">Transferencias Rivera</h1>
 </div>
 
 <div class="dolar-bar">🇺🇸 Precio Dólar = <span id="txtDolar">742,23</span> VES</div>
@@ -98,7 +96,7 @@
     <input type="tel" inputmode="numeric" id="montoInput" class="input-box" placeholder="0,00">
 </div>
 
-<!-- VENTANA MODAL PROTEGIDA -->
+<!-- PANEL OCULTO DE ADMINISTRACIÓN -->
 <div class="modal" id="modalAdmin">
     <div class="modal-content">
         <h2>⚙️ Cambiar Tasas</h2>
@@ -120,7 +118,6 @@
 </div>
 
 <script>
-// Cargar tasas guardadas o usar las predeterminadas
 var TASA_BR_VE = parseFloat(localStorage.getItem('TASA_BR_VE')) || 157.00;
 var TASA_VE_BR = parseFloat(localStorage.getItem('TASA_VE_BR')) || 190.00;
 var TASA_USD_VES = parseFloat(localStorage.getItem('TASA_USD_VES')) || 742.23;
@@ -166,7 +163,7 @@ function seleccionarRuta(modo) {
     actualizarValores();
 }
 
-// Formato de banco en tiempo real
+// Formato estilo banco
 document.getElementById('montoInput').addEventListener('input', function(e) {
     var soloNumeros = this.value.replace(/\D/g, ''); 
     if (soloNumeros === '') { this.value = ''; return; }
@@ -209,17 +206,21 @@ document.getElementById('montoInput').addEventListener('focus', function() {
     }, 300);
 });
 
-// Panel de Administración con clave 6453
-function abrirAdmin() {
-    var pin = prompt("Ingrese la clave de acceso:");
-    if (pin === "6453") {
-        document.getElementById('inputDolar').value = TASA_USD_VES;
-        document.getElementById('inputTasaBR').value = TASA_BR_VE;
-        document.getElementById('inputTasaVE').value = TASA_VE_BR;
-        document.getElementById('modalAdmin').style.display = 'flex';
-    } else if (pin !== null) {
+// Verificación de la clave de administración
+function pedirClave() {
+    var claveIngresada = prompt("Ingrese la clave de administrador:");
+    if (claveIngresada === "Laa6453*") {
+        abrirAdmin();
+    } else if (claveIngresada !== null) {
         alert("Clave incorrecta");
     }
+}
+
+function abrirAdmin() {
+    document.getElementById('inputDolar').value = TASA_USD_VES;
+    document.getElementById('inputTasaBR').value = TASA_BR_VE;
+    document.getElementById('inputTasaVE').value = TASA_VE_BR;
+    document.getElementById('modalAdmin').style.display = 'flex';
 }
 
 function cerrarAdmin() {
@@ -236,7 +237,6 @@ function guardarTasas() {
         TASA_BR_VE = nuevaBR;
         TASA_VE_BR = nuevaVE;
 
-        // Guardar en la memoria del dispositivo
         localStorage.setItem('TASA_USD_VES', TASA_USD_VES);
         localStorage.setItem('TASA_BR_VE', TASA_BR_VE);
         localStorage.setItem('TASA_VE_BR', TASA_VE_BR);
@@ -249,8 +249,8 @@ function guardarTasas() {
     }
 }
 
-// Inicializar interfaz
 actualizarValores();
 </script>
 </body>
 </html>
+
