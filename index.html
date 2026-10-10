@@ -1,269 +1,308 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Transferencias Rivera</title>
-     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 50vh; overflow-x: hidden; }
-        .header-container { display: flex; justify-content: center; align-items: center; width: 100%; max-width: 338px; margin: 4px 0 12px 0; }
-        h1 { color: #1e3a8a; margin: 0; font-size: 20px; text-align: center; cursor: pointer; user-select: none; }
-        .dolar-bar { background: #f0fdf4; border: 2px solid #16a34a; padding: 10px; border-radius: 9px; width: 100%; max-width: 338px; text-align: center; margin-bottom: 14px; font-weight: bold; color: #15803d; font-size: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .tabs { display: flex; width: 100%; max-width: 338px; gap: 10px; margin-bottom: 14px; }
-        .tab { flex: 1; padding: 12px 4px; text-align: center; background: white; border: 2px solid #cbd5e1; border-radius: 10px; font-weight: bold; color: #64748b; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .tab.active { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; box-shadow: 0 3px 8px rgba(37,99,235,0.15); transform: translateY(-1px); }
-        .banderas { font-size: 25px; letter-spacing: 1px; }
-        .tab-texto { font-size: 12px; line-height: 1.2; }
-        .calc-card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 100%; max-width: 338px; }
-        .tasa-info { text-align: center; font-size: 13px; color: #475569; margin-bottom: 12px; }
-        .tasa-valor { font-size: 27px; font-weight: 900; color: #2563eb; display: block; margin-top: 2px; }
-        .res-box { display: none; background: #f8fafc; border-left: 5px solid #1e3a8a; padding: 12px; border-radius: 8px; margin-bottom: 14px; animation: fadeIn 0.2s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .row:last-child { margin-bottom: 0; }
-        .bold { font-weight: 800; color: #1e3a8a; font-size: 18px; }
-        .green { color: #14532d; font-weight: 800; font-size: 18px; }
-        .input-label { display: block; text-align: center; font-size: 12px; color: #64748b; font-weight: bold; margin-bottom: 6px; }
-        .input-box { width: 100%; padding: 13px; border: 2px solid #2563eb; border-radius: 9px; font-size: 25px; font-weight: bold; text-align: center; color: #1e3a8a; background: #ffffff; }
-        .input-box:focus { outline: none; border-color: #1d4ed8; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-content { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-content h2 { margin-top: 0; color: #1e3a8a; font-size: 18px; text-align: center; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; color: #475569; font-weight: bold; margin-bottom: 4px; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px; font-weight: bold; }
-        .btn-save { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 5px; }
-        .btn-cancel { width: 100%; background: #e2e8f0; color: #475569; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 8px; }
-        .status-msg { font-size: 12px; text-align: center; color: #2563eb; margin-top: 8px; display: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1b33">
+<title>Transferencias Rivera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fondo:#0b1b33; --fondo2:#12274a; --tarjeta:#142a4f; --linea:rgba(201,164,92,.28);
+  --oro:#c9a45c; --oro-claro:#e6cd96; --marfil:#f6f1e7; --suave:#9fb0cb; --error:#ff8a80;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{margin:0;min-height:100%;font-family:var(--sans);color:var(--marfil);
+  background:radial-gradient(120% 70% at 50% 0%,var(--fondo2) 0%,var(--fondo) 62%) fixed;
+  padding:max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;align-items:center}
+.wrap{width:100%;max-width:400px}
+header{display:flex;align-items:center;gap:12px;margin:6px 2px 18px;cursor:pointer;user-select:none}
+.sello{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--oro);display:grid;place-items:center;
+  font-family:var(--serif);font-size:22px;font-weight:600;color:var(--oro-claro)}
+header h1{margin:0;font-family:var(--serif);font-weight:500;font-size:21px;letter-spacing:.2px}
+header small{display:block;color:var(--suave);font-size:12px;font-weight:500;margin-top:1px}
+
+.dolar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border:1px solid var(--linea);
+  border-radius:14px;background:rgba(255,255,255,.03);font-size:14px;color:var(--suave);margin-bottom:14px}
+.dolar b{color:var(--marfil);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+
+.card{background:var(--tarjeta);border:1px solid var(--linea);border-radius:22px;padding:20px 18px 18px;
+  box-shadow:0 18px 40px rgba(0,0,0,.35)}
+
+.ruta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px}
+.pais{display:flex;align-items:center;gap:10px;min-width:0}
+.pais svg{width:34px;height:24px;border-radius:5px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+.pais span{font-weight:700;font-size:15px}
+.pais small{display:block;color:var(--suave);font-weight:500;font-size:11px}
+.pais.der{flex-direction:row-reverse;text-align:right}
+.swap{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--oro);background:transparent;color:var(--oro-claro);
+  cursor:pointer;display:grid;place-items:center;transition:transform .35s ease,background .2s}
+.swap:hover{background:rgba(201,164,92,.12)}
+.swap.giro{transform:rotate(180deg)}
+.swap svg{width:20px;height:20px}
+
+.tasa{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);margin-bottom:18px}
+.tasa span{color:var(--suave);font-size:13px;font-weight:600}
+.tasa b{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--oro-claro);font-variant-numeric:tabular-nums}
+
+label.campo{display:block;color:var(--suave);font-size:13px;font-weight:600;margin-bottom:8px}
+.entrada{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.22);border:1.5px solid var(--linea);border-radius:14px;padding:4px 14px;transition:border-color .2s,box-shadow .2s}
+.entrada:focus-within{border-color:var(--oro);box-shadow:0 0 0 4px rgba(201,164,92,.16)}
+.prefijo{font-weight:800;color:var(--oro);font-size:18px}
+#monto{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--marfil);font-family:var(--sans);font-weight:700;font-size:28px;padding:12px 0;text-align:right;font-variant-numeric:tabular-nums}
+#monto::placeholder{color:rgba(246,241,231,.25)}
+.chips{display:flex;gap:8px;margin-top:10px}
+.chips button{flex:1;padding:10px 0;border-radius:10px;border:1px solid var(--linea);background:transparent;color:var(--marfil);font:700 13px var(--sans);cursor:pointer;transition:background .15s,transform .1s}
+.chips button:active{transform:scale(.96);background:rgba(201,164,92,.16)}
+
+.resultado{margin-top:18px;padding:18px;border-radius:16px;background:linear-gradient(160deg,rgba(201,164,92,.16),rgba(201,164,92,.04));border:1px solid var(--linea);display:none}
+.resultado.on{display:block}
+.resultado .lbl{color:var(--suave);font-size:13px;font-weight:600}
+.resultado .grande{font-family:var(--serif);font-weight:600;font-size:clamp(30px,10vw,40px);line-height:1.1;margin:4px 0 12px;color:var(--marfil);font-variant-numeric:tabular-nums;word-break:break-word}
+.resultado .grande em{font-style:normal;font-family:var(--sans);font-size:.42em;font-weight:700;color:var(--oro);margin-left:6px}
+.resultado .usd{display:flex;justify-content:space-between;color:var(--suave);font-size:14px;font-weight:600;padding-top:12px;border-top:1px solid var(--linea)}
+.resultado .usd b{color:var(--marfil);font-variant-numeric:tabular-nums}
+
+.enviar{display:none;margin-top:14px;width:100%;padding:16px;border:0;border-radius:14px;background:linear-gradient(180deg,var(--oro-claro),var(--oro));color:#1a1305;font:800 16px var(--sans);cursor:pointer;text-align:center;text-decoration:none;transition:transform .1s,filter .2s}
+.enviar.on{display:block}
+.enviar:active{transform:scale(.98)}
+.enviar:hover{filter:brightness(1.05)}
+
+.pie{margin-top:18px;text-align:center;color:var(--suave);font-size:12px;line-height:1.6}
+.pie #actualizado{display:block;color:var(--oro-claro);font-weight:600}
+
+/* Panel de administrador */
+.modal{position:fixed;inset:0;background:rgba(3,10,22,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.on{display:flex}
+.panel{width:100%;max-width:340px;background:var(--fondo2);border:1px solid var(--linea);border-radius:20px;padding:22px;max-height:92vh;overflow:auto}
+.panel h2{margin:0 0 14px;font-family:var(--serif);font-weight:500;font-size:20px}
+.panel label{display:block;color:var(--suave);font-size:12px;font-weight:600;margin:12px 0 5px}
+.panel input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--linea);background:rgba(0,0,0,.25);color:var(--marfil);font:700 16px var(--sans)}
+.panel input:focus{outline:2px solid var(--oro);outline-offset:1px}
+.panel .acciones{margin-top:18px;display:grid;gap:8px}
+.btn-p{padding:14px;border:0;border-radius:12px;background:var(--oro);color:#1a1305;font:800 15px var(--sans);cursor:pointer}
+.btn-s{padding:12px;border:1px solid var(--linea);border-radius:12px;background:transparent;color:var(--marfil);font:700 14px var(--sans);cursor:pointer}
+.msg{min-height:18px;margin-top:10px;font-size:13px;font-weight:600;text-align:center;color:var(--oro-claro)}
+.msg.err{color:var(--error)}
+:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
+<div class="wrap">
+  <header id="logo" title="Panel de administrador">
+    <div class="sello">R</div>
+    <div><h1>Transferencias Rivera</h1><small>Brasil y Venezuela, con tasa clara</small></div>
+  </header>
 
-<div class="header-container">
-    <h1 onclick="pedirClave()">Transferencias Rivera</h1>
+  <div class="dolar"><span>Dólar oficial</span><b><span id="txtDolar">---</span> VES</b></div>
+
+  <main class="card">
+    <div class="ruta">
+      <div class="pais" id="origen"></div>
+      <button class="swap" id="btnSwap" aria-label="Invertir dirección">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4m4 4H7"/></svg>
+      </button>
+      <div class="pais der" id="destino"></div>
+    </div>
+
+    <div class="tasa"><span>Tasa aplicada</span><b id="tasaActual">...</b></div>
+
+    <label class="campo" id="labelMonto" for="monto">Monto a enviar en BRL</label>
+    <div class="entrada">
+      <span class="prefijo" id="prefijo">R$</span>
+      <input id="monto" type="tel" inputmode="numeric" placeholder="0,00" autocomplete="off">
+    </div>
+    <div class="chips" id="chips"></div>
+
+    <div class="resultado" id="resBox" aria-live="polite">
+      <div class="lbl">Recibe</div>
+      <div class="grande"><span id="resPrincipal">0,00</span><em id="monedaRes">VES</em></div>
+      <div class="usd"><span>Equivale a</span><b id="resDolares">0,00 USD</b></div>
+    </div>
+
+    <a class="enviar" id="btnEnviar" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+  </main>
+
+  <p class="pie"><span id="actualizado"></span>Las tasas pueden cambiar durante el día.</p>
 </div>
 
-<div class="dolar-bar">🇺🇸 Precio Dólar = <span id="txtDolar">---</span> VES</div>
-
-<div class="tabs">
-    <div class="tab active" id="tabBR" onclick="seleccionarRuta('BR')">
-        <div class="banderas">🇧🇷➔🇻🇪</div>
-        <div class="tab-texto">Brasil a<br>Venezuela</div>
+<div class="modal" id="modalAdmin" role="dialog" aria-modal="true" aria-labelledby="tituloAdmin">
+  <div class="panel">
+    <h2 id="tituloAdmin">Actualizar tasas</h2>
+    <label for="inClave">Clave de administrador</label>
+    <input type="password" id="inClave" autocomplete="current-password">
+    <label for="inDolar">Dólar oficial (VES)</label>
+    <input type="number" step="0.01" id="inDolar" inputmode="decimal">
+    <label for="inBR">Tasa Brasil a Venezuela</label>
+    <input type="number" step="0.01" id="inBR" inputmode="decimal">
+    <label for="inVE">Tasa Venezuela a Brasil</label>
+    <input type="number" step="0.01" id="inVE" inputmode="decimal">
+    <div class="msg" id="adminMsg"></div>
+    <div class="acciones">
+      <button class="btn-p" id="btnGuardar">Guardar tasas</button>
+      <button class="btn-s" id="btnCerrar">Cancelar</button>
     </div>
-    <div class="tab" id="tabVE" onclick="seleccionarRuta('VE')">
-        <div class="banderas">🇻🇪➔🇧🇷</div>
-        <div class="tab-texto">Venezuela a<br>Brasil</div>
-    </div>
-</div>
-
-<div class="calc-card">
-    <div class="tasa-info">
-        Tasa Aplicada
-        <span class="tasa-valor" id="tasaActual">...</span>
-    </div>
-
-    <div class="res-box" id="resBox">
-        <div class="row bold">
-            <span>Recibe:</span> 
-            <span id="resPrincipal">0,00 VES</span>
-        </div>
-        <div class="row green">
-            <span>Dólares:</span> 
-            <span id="resDolares">0,00 USD</span>
-        </div>
-    </div>
-
-    <label class="input-label" id="labelMonto">Monto a enviar en BRL</label>
-    <input type="tel" inputmode="numeric" id="montoInput" class="input-box" placeholder="0,00">
-</div>
-
-<div class="modal" id="modalAdmin">
-    <div class="modal-content">
-        <h2>⚙️ Cambiar Tasas</h2>
-        <div class="form-group">
-            <label>Precio Oficial Dólar (VES)</label>
-            <input type="number" step="0.01" id="inputDolar">
-        </div>
-        <div class="form-group">
-            <label>Tasa Brasil ➔ Venezuela</label>
-            <input type="number" step="0.01" id="inputTasaBR">
-        </div>
-        <div class="form-group">
-            <label>Tasa Venezuela ➔ Brasil</label>
-            <input type="number" step="0.01" id="inputTasaVE">
-        </div>
-        <button class="btn-save" id="btnGuardar" onclick="guardarTasas()">Guardar en la Nube</button>
-        <div class="status-msg" id="statusMsg">Guardando cambios...</div>
-        <button class="btn-cancel" onclick="cerrarAdmin()">Cancelar</button>
-    </div>
+  </div>
 </div>
 
 <script>
-// TUS DATOS INTEGRADOS
-var BIN_ID = "6aae91c7ffd5d160531975d7";
-var MASTER_KEY = "$2a$10$HAMmD6XyJiJ4QvgrjFtvDe4nKEdxebkE1t8agZDjodr0hW6z3Gyp2";
+/* ============ CONFIGURACIÓN DIRECCIÓN DIRECTA A JSONBIN ============ */
+var CONFIG = { 
+  BIN_ID: "6aae91c7ffd5d160531975d7", 
+  MASTER_KEY: "$2a$10$HAMmD6XyJiJ4QvgrjFtvDe4nKEdxebkE1t8agZDjodr0hW6z3Gyp2",
+  CLAVE_ADMIN: "Laa6453*",
+  WHATSAPP: "" 
+};
 
-var TASA_BR_VE = 157.00;
-var TASA_VE_BR = 190.00;
-var TASA_USD_VES = 742.23;
+var TASA_BR_VE = 157.00, TASA_VE_BR = 190.00, TASA_USD_VES = 742.23;
+var modo = 'BR', actualizado = '';
+var $ = function(id){ return document.getElementById(id); };
 
-var modoActual = 'BR';
-var ultimoMontoTexto = "";
+var BANDERA_BR = '<svg viewBox="0 0 34 24"><rect width="34" height="24" fill="#009b3a"/><path d="M17 3 31 12 17 21 3 12Z" fill="#fedf00"/><circle cx="17" cy="12" r="4.6" fill="#002776"/></svg>';
+var BANDERA_VE = '<svg viewBox="0 0 34 24"><rect width="34" height="8" fill="#ffcc00"/><rect y="8" width="34" height="8" fill="#00247d"/><rect y="16" width="34" height="8" fill="#cf142b"/><g fill="#fff"><circle cx="9" cy="12" r=".9"/><circle cx="13" cy="10.2" r=".9"/><circle cx="17" cy="9.6" r=".9"/><circle cx="21" cy="10.2" r=".9"/><circle cx="25" cy="12" r=".9"/></g></svg>';
 
-function formato(n) { 
-    return n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
+function formato(n){ return n.toLocaleString('es-VE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function aNumero(t){ if(!t) return 0; return parseFloat(t.replace(/\./g,'').replace(',','.')) || 0; }
+
+function pintarRuta(){
+  function bloque(bandera,nombre,mon){ return bandera+'<div><span>'+nombre+'</span><small>'+mon+'</small></div>'; }
+  var b = modo==='BR'
+    ? [bloque(BANDERA_BR,'Brasil','Reales (BRL)'), bloque(BANDERA_VE,'Venezuela','Bolívares (VES)')]
+    : [bloque(BANDERA_VE,'Venezuela','Bolívares (VES)'), bloque(BANDERA_BR,'Brasil','Reales (BRL)')];
+  $('origen').innerHTML = b[0]; $('destino').innerHTML = b[1];
+  $('labelMonto').textContent = 'Monto a enviar en ' + (modo==='BR'?'BRL':'VES');
+  $('prefijo').textContent = modo==='BR' ? 'R$' : 'Bs.';
+  var montos = modo==='BR' ? [100,200,500,1000] : [10000,20000,50000,100000];
+  $('chips').innerHTML = montos.map(function(m){ return '<button type="button" data-m="'+m+'">'+(m>=1000?(m/1000)+' mil':m)+'</button>'; }).join('');
 }
 
-function convertirANumero(texto) {
-    if (!texto) return 0;
-    var limpio = texto.replace(/\./g, '').replace(',', '.');
-    return parseFloat(limpio) || 0;
+function pintarTasas(){
+  $('txtDolar').textContent = formato(TASA_USD_VES);
+  $('tasaActual').textContent = formato(modo==='BR' ? TASA_BR_VE : TASA_VE_BR);
+  if(actualizado){
+    var d = new Date(actualizado);
+    if(!isNaN(d)) $('actualizado').textContent = 'Tasa actualizada el ' + d.toLocaleDateString('es-VE',{day:'2-digit',month:'2-digit'}) + ' a las ' + d.toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'});
+  }
+  recalcular();
 }
 
-function obtenerTasasRemotas() {
-    fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest', {
-        headers: { 'X-Master-Key': MASTER_KEY }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.record) {
-            TASA_USD_VES = data.record.USD_VES;
-            TASA_BR_VE = data.record.BR_VE;
-            TASA_VE_BR = data.record.VE_BR;
-            actualizarValores();
-        }
-    })
-    .catch(err => console.error("Error cargando desde la nube:", err));
+var animId = 0;
+function animar(el, hasta){
+  var ini = aNumero(el.textContent), t0 = null, id = ++animId;
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){ el.textContent = formato(hasta); return; }
+  function paso(t){
+    if(id!==animId) return;
+    if(!t0) t0 = t;
+    var p = Math.min((t-t0)/280,1), e = 1-Math.pow(1-p,3);
+    el.textContent = formato(ini + (hasta-ini)*e);
+    if(p<1) requestAnimationFrame(paso);
+  }
+  requestAnimationFrame(paso);
 }
 
-function actualizarValores() {
-    document.getElementById('txtDolar').innerText = formato(TASA_USD_VES);
-    if (modoActual === 'BR') {
-        document.getElementById('tasaActual').innerText = formato(TASA_BR_VE);
-    } else {
-        document.getElementById('tasaActual').innerText = formato(TASA_VE_BR);
-    }
-    recalcular();
+function recalcular(){
+  var monto = aNumero($('monto').value), box = $('resBox'), btn = $('btnEnviar');
+  if(monto<=0){ box.classList.remove('on'); btn.classList.remove('on'); return; }
+  var principal, usd, moneda;
+  if(modo==='BR'){ principal = monto*TASA_BR_VE; usd = principal/TASA_USD_VES; moneda='VES'; }
+  else { principal = monto/TASA_VE_BR; usd = monto/TASA_USD_VES; moneda='BRL'; }
+  box.classList.add('on');
+  $('monedaRes').textContent = moneda;
+  animar($('resPrincipal'), principal);
+  $('resDolares').textContent = formato(usd) + ' USD';
+  if(CONFIG.WHATSAPP){
+    var texto = 'Hola, quiero enviar ' + (modo==='BR'?'R$ ':'Bs. ') + formato(monto) + ' ('+(modo==='BR'?'Brasil a Venezuela':'Venezuela a Brasil')+'). Recibirían ' + formato(principal) + ' ' + moneda + ' con la tasa ' + formato(modo==='BR'?TASA_BR_VE:TASA_VE_BR) + '.';
+    btn.href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' + encodeURIComponent(texto);
+    btn.classList.add('on');
+  }
 }
 
-function seleccionarRuta(modo) {
-    modoActual = modo;
-    document.getElementById('montoInput').value = ""; 
-    ultimoMontoTexto = "";
-    document.getElementById('resBox').style.display = 'none';
-    
-    if (modo === 'BR') {
-        document.getElementById('tabBR').classList.add('active');
-        document.getElementById('tabVE').classList.remove('active');
-        document.getElementById('labelMonto').innerText = "Monto a enviar en BRL";
-    } else {
-        document.getElementById('tabVE').classList.add('active');
-        document.getElementById('tabBR').classList.remove('active');
-        document.getElementById('labelMonto').innerText = "Monto a enviar en VES";
-    }
-    actualizarValores();
-}
-
-document.getElementById('montoInput').addEventListener('input', function(e) {
-    var soloNumeros = this.value.replace(/\D/g, ''); 
-    if (soloNumeros === '') { this.value = ''; return; }
-    var valorNumerico = parseFloat(soloNumeros) / 100;
-    this.value = formato(valorNumerico);
+$('monto').addEventListener('input', function(){
+  var d = this.value.replace(/\D/g,'');
+  this.value = d==='' ? '' : formato(parseInt(d,10)/100);
+  recalcular();
+});
+$('chips').addEventListener('click', function(e){
+  var m = e.target.getAttribute && e.target.getAttribute('data-m');
+  if(m){ $('monto').value = formato(parseFloat(m)); recalcular(); }
+});
+$('btnSwap').addEventListener('click', function(){
+  modo = modo==='BR' ? 'VE' : 'BR';
+  this.classList.toggle('giro');
+  $('monto').value = ''; $('resBox').classList.remove('on'); $('btnEnviar').classList.remove('on');
+  pintarRuta(); pintarTasas();
 });
 
-function recalcular() {
-    var valorInput = document.getElementById('montoInput').value;
-    var monto = convertirANumero(valorInput);
-    var resBox = document.getElementById('resBox');
-    
-    if (monto > 0) {
-        resBox.style.display = 'block';
-        if (modoActual === 'BR') {
-            var ves = monto * TASA_BR_VE;
-            document.getElementById('resPrincipal').innerText = formato(ves) + " VES";
-            document.getElementById('resDolares').innerText = formato(ves / TASA_USD_VES) + " USD";
-        } else {
-            var brl = monto / TASA_VE_BR;
-            document.getElementById('resPrincipal').innerText = formato(brl) + " BRL";
-            document.getElementById('resDolares').innerText = formato(monto / TASA_USD_VES) + " USD";
-        }
-    } else {
-        resBox.style.display = 'none';
-    }
+/* ---- Lectura de tasas ---- */
+function cargarTasas(){
+  if(!CONFIG.BIN_ID) return;
+  fetch('https://api.jsonbin.io/v3/b/'+CONFIG.BIN_ID+'/latest', {
+    headers: { 'X-Master-Key': CONFIG.MASTER_KEY }
+  })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var r = d.record; if(!r) return;
+      TASA_USD_VES = r.USD_VES || TASA_USD_VES;
+      TASA_BR_VE = r.BR_VE || TASA_BR_VE;
+      TASA_VE_BR = r.VE_BR || TASA_VE_BR;
+      actualizado = r.ACTUALIZADO || '';
+      pintarTasas();
+    })
+    .catch(function(){ $('actualizado').textContent = 'No se pudo actualizar la tasa. Confirma el monto por WhatsApp.'; });
 }
 
-setInterval(function() {
-    var valorInput = document.getElementById('montoInput').value;
-    if (valorInput !== ultimoMontoTexto) {
-        ultimoMontoTexto = valorInput;
-        recalcular();
-    }
-}, 100);
+/* ---- Panel de administrador ---- */
+function msgAdmin(t, err){ var m=$('adminMsg'); m.textContent=t; m.className='msg'+(err?' err':''); }
+$('logo').addEventListener('click', function(){
+  $('inDolar').value = TASA_USD_VES; $('inBR').value = TASA_BR_VE; $('inVE').value = TASA_VE_BR; $('inClave').value='';
+  msgAdmin(''); $('modalAdmin').classList.add('on'); $('inClave').focus();
+});
+$('btnCerrar').addEventListener('click', function(){ $('modalAdmin').classList.remove('on'); });
 
-function pedirClave() {
-    var claveIngresada = prompt("Ingrese la clave de administrador:");
-    if (claveIngresada === "Laa6453*") {
-        abrirAdmin();
-    } else if (claveIngresada !== null) {
-        alert("Clave incorrecta");
-    }
-}
+$('btnGuardar').addEventListener('click', function(){
+  var d = parseFloat($('inDolar').value), b = parseFloat($('inBR').value), v = parseFloat($('inVE').value), clave = $('inClave').value;
+  if(!(d>0 && b>0 && v>0)) return msgAdmin('Escribe montos válidos en las tres tasas.', true);
+  if(!clave) return msgAdmin('Escribe la clave de administrador.', true);
+  if(clave !== CONFIG.CLAVE_ADMIN) return msgAdmin('Clave incorrecta.', true);
 
-function abrirAdmin() {
-    document.getElementById('inputDolar').value = TASA_USD_VES;
-    document.getElementById('inputTasaBR').value = TASA_BR_VE;
-    document.getElementById('inputTasaVE').value = TASA_VE_BR;
-    document.getElementById('modalAdmin').style.display = 'flex';
-}
+  msgAdmin('Guardando en la nube...');
 
-function cerrarAdmin() {
-    document.getElementById('modalAdmin').style.display = 'none';
-}
+  var fechaIso = new Date().toISOString();
+  var datosNuevos = {
+    USD_VES: d,
+    BR_VE: b,
+    VE_BR: v,
+    ACTUALIZADO: fechaIso
+  };
 
-function guardarTasas() {
-    var nuevoDolar = parseFloat(document.getElementById('inputDolar').value);
-    var nuevaBR = parseFloat(document.getElementById('inputTasaBR').value);
-    var nuevaVE = parseFloat(document.getElementById('inputTasaVE').value);
+  fetch('https://api.jsonbin.io/v3/b/' + CONFIG.BIN_ID, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': CONFIG.MASTER_KEY
+    },
+    body: JSON.stringify(datosNuevos)
+  })
+  .then(function(r){ if(!r.ok) throw new Error('red'); return r.json(); })
+  .then(function(){
+    TASA_USD_VES = d; TASA_BR_VE = b; TASA_VE_BR = v; actualizado = fechaIso;
+    pintarTasas();
+    $('modalAdmin').classList.remove('on');
+    alert('¡Tasas actualizadas globalmente con éxito!');
+  })
+  .catch(function(){
+    msgAdmin('No se pudo guardar en la nube. Revisa tu conexión.', true);
+  });
+});
 
-    if (nuevoDolar > 0 && nuevaBR > 0 && nuevaVE > 0) {
-        var msg = document.getElementById('statusMsg');
-        msg.style.display = 'block';
-
-        var nuevosDatos = {
-            USD_VES: nuevoDolar,
-            BR_VE: nuevaBR,
-            VE_BR: nuevaVE
-        };
-
-        fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': MASTER_KEY
-            },
-            body: JSON.stringify(nuevosDatos)
-        })
-        .then(response => response.json())
-        .then(data => {
-            msg.style.display = 'none';
-            TASA_USD_VES = nuevoDolar;
-            TASA_BR_VE = nuevaBR;
-            TASA_VE_BR = nuevaVE;
-            actualizarValores();
-            cerrarAdmin();
-            alert("¡Tasa actualizada globalmente! Todos los clientes la verán al instante.");
-        })
-        .catch(err => {
-            msg.style.display = 'none';
-            alert("Ocurrió un error al guardar en la nube. Revisa tu conexión.");
-        });
-    } else {
-        alert("Por favor ingrese montos válidos.");
-    }
-}
-
-obtenerTasasRemotas();
+pintarRuta(); pintarTasas(); cargarTasas();
 </script>
 </body>
 </html>
