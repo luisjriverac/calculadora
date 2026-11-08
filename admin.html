@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b1b33">
+<link rel="manifest" href="manifest-admin.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Rivera Admin</title>
+<style>
+:root{--fondo:#0b1b33;--tarjeta:#142a4f;--linea:rgba(201,164,92,.28);--oro:#c9a45c;--oro-claro:#e6cd96;--marfil:#f6f1e7;--suave:#9fb0cb;--error:#ff8a80}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--marfil);background:var(--fondo);padding:max(16px,env(safe-area-inset-top)) 16px 24px;display:flex;justify-content:center}
+.w{width:100%;max-width:360px}
+h1{font-size:20px;margin:6px 0 2px;color:var(--oro-claro)}
+p.s{margin:0 0 14px;color:var(--suave);font-size:13px}
+.c{background:var(--tarjeta);border:1px solid var(--linea);border-radius:18px;padding:16px}
+label{display:block;color:var(--suave);font-size:12px;font-weight:600;margin:12px 0 5px}
+label:first-child{margin-top:0}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--linea);background:rgba(0,0,0,.25);color:var(--marfil);font:700 17px inherit}
+input:focus{outline:2px solid var(--oro)}
+button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:12px;background:var(--oro);color:#1a1305;font:800 16px inherit;cursor:pointer}
+button.o{background:transparent;border:1px solid var(--linea);color:var(--marfil);font-size:13px;padding:10px;margin-top:10px}
+.m{min-height:20px;margin-top:12px;text-align:center;font-size:13px;font-weight:600;color:var(--oro-claro)}
+.m.e{color:var(--error)}
+#ap{display:none}
+</style>
+</head>
+<body>
+<div class="w">
+  <h1>Rivera Admin</h1>
+  <p class="s">Actualizar tasas de Cambios Rivera</p>
+
+  <div class="c" id="ak">
+    <label for="k">Clave de JSONBin (solo una vez en este teléfono)</label>
+    <input type="password" id="k" autocomplete="off">
+    <button id="gk">Guardar clave y entrar</button>
+  </div>
+
+  <div class="c" id="ap">
+    <label for="d">Dólar oficial (VES)</label>
+    <input type="number" step="0.01" id="d" inputmode="decimal">
+    <label for="b">Tasa Brasil a Venezuela</label>
+    <input type="number" step="0.01" id="b" inputmode="decimal">
+    <label for="v">Tasa Venezuela a Brasil</label>
+    <input type="number" step="0.01" id="v" inputmode="decimal">
+    <button id="gt">Guardar tasas</button>
+    <button class="o" id="sk">Cambiar clave guardada</button>
+  </div>
+  <div class="m" id="m"></div>
+</div>
+<script>
+var BIN = "6aae91c7ffd5d160531975d7", $ = function(i){return document.getElementById(i);}, KEY = '';
+function msg(t,e){var m=$('m');m.textContent=t;m.className='m'+(e?' e':'');}
+function leer(){try{return localStorage.getItem('rivera_key')||'';}catch(e){return '';}}
+function guardar(k){try{localStorage.setItem('rivera_key',k);}catch(e){}}
+function borrar(){try{localStorage.removeItem('rivera_key');}catch(e){}}
+function mostrar(){ $('ak').style.display=KEY?'none':'block'; $('ap').style.display=KEY?'block':'none'; }
+function cargar(){
+  msg('Cargando tasas...');
+  fetch('https://api.jsonbin.io/v3/b/'+BIN+'/latest',{headers:{'X-Master-Key':KEY}})
+  .then(function(r){ if(!r.ok) throw new Error('clave'); return r.json(); })
+  .then(function(j){ var r=j.record||{}; $('d').value=r.USD_VES||''; $('b').value=r.BR_VE||''; $('v').value=r.VE_BR||''; msg(''); })
+  .catch(function(){ msg('No se pudo entrar. Revisa la clave o la conexión.',true); borrar(); KEY=''; mostrar(); });
+}
+$('gk').onclick=function(){ var k=$('k').value.trim(); if(!k) return msg('Escribe la clave.',true); KEY=k; guardar(k); $('k').value=''; mostrar(); cargar(); };
+$('sk').onclick=function(){ borrar(); KEY=''; mostrar(); msg(''); };
+$('gt').onclick=function(){
+  var d=parseFloat($('d').value), b=parseFloat($('b').value), v=parseFloat($('v').value);
+  if(!(d>0&&b>0&&v>0)) return msg('Escribe montos válidos en las tres tasas.',true);
+  msg('Guardando...');
+  fetch('https://api.jsonbin.io/v3/b/'+BIN,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':KEY},
+    body:JSON.stringify({USD_VES:d,BR_VE:b,VE_BR:v,ACTUALIZADO:new Date().toISOString()})})
+  .then(function(r){ if(!r.ok) throw new Error('red'); msg('¡Tasas actualizadas con éxito!'); })
+  .catch(function(){ msg('No se pudo guardar. Revisa tu conexión.',true); });
+};
+KEY=leer(); mostrar(); if(KEY) cargar();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+</script>
+</body>
+</html>
