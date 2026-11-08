@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1b33">
-  <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
 <title>Transferencias Rivera</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +33,7 @@ body{margin:0;min-height:100%;font-family:var(--sans);color:var(--marfil);
 @keyframes pulso{0%{box-shadow:0 0 0 0 rgba(61,220,132,.55)}70%{box-shadow:0 0 0 7px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
 .horario{text-align:center;color:var(--suave);font-size:11px;font-weight:500;margin:0 0 10px}
 
-header{display:flex;align-items:center;gap:10px;margin:0 2px 10px;cursor:pointer;user-select:none}
+header{display:flex;align-items:center;gap:10px;margin:0 2px 10px;user-select:none}
 .sello{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--oro);display:grid;place-items:center;
   font-family:var(--serif);font-size:18px;font-weight:600;color:var(--oro-claro)}
 header h1{margin:0;font-family:var(--serif);font-weight:500;font-size:18px;letter-spacing:.2px}
@@ -116,7 +115,7 @@ label.campo{display:block;color:var(--suave);font-size:12px;font-weight:600;marg
   <div class="estado" id="estado" role="status"><span class="punto"></span><span id="estadoTxt">Cerrado</span></div>
   <p class="horario">Lun a Sáb 7am – 8pm · Dom 8am – 4pm<br>(hora de Venezuela)</p>
 
-  <header id="logo" title="Panel de administrador">
+  <header>
     <div class="sello">R</div>
     <div><h1>Transferencias Rivera</h1><small>Brasil y Venezuela, con tasa clara</small></div>
   </header>
@@ -160,31 +159,10 @@ label.campo{display:block;color:var(--suave);font-size:12px;font-weight:600;marg
   <p class="confianza">Tu confianza es nuestra referencia</p>
 </div>
 
-<div class="modal" id="modalAdmin" role="dialog" aria-modal="true" aria-labelledby="tituloAdmin">
-  <div class="panel">
-    <h2 id="tituloAdmin">Actualizar tasas</h2>
-    <label for="inClave">Clave de administrador</label>
-    <input type="password" id="inClave" autocomplete="current-password">
-    <label for="inDolar">Dólar oficial (VES)</label>
-    <input type="number" step="0.01" id="inDolar" inputmode="decimal">
-    <label for="inBR">Tasa Brasil a Venezuela</label>
-    <input type="number" step="0.01" id="inBR" inputmode="decimal">
-    <label for="inVE">Tasa Venezuela a Brasil</label>
-    <input type="number" step="0.01" id="inVE" inputmode="decimal">
-    <div class="msg" id="adminMsg"></div>
-    <div class="acciones">
-      <button class="btn-p" id="btnGuardar">Guardar tasas</button>
-      <button class="btn-s" id="btnCerrar">Cancelar</button>
-    </div>
-  </div>
-</div>
-
 <script>
-/* ============ CONFIGURACIÓN DIRECCIÓN DIRECTA A JSONBIN ============ */
+/* ============ CONFIGURACIÓN ============ */
 var CONFIG = { 
-  BIN_ID: "6aae91c7ffd5d160531975d7", 
-  MASTER_KEY: "$2a$10$HAMmD6XyJiJ4QvgrjFtvDe4nKEdxebkE1t8agZDjodr0hW6z3Gyp2",
-  CLAVE_ADMIN: "Laa6453*",
+  REPO: "luisjriverac/calculadora",
   WHATSAPP: "",
   ZONA_HORARIA: "America/Caracas" /* cambia a "America/Sao_Paulo" si tu horario es de Brasil */
 };
@@ -303,15 +281,13 @@ $('btnSwap').addEventListener('click', function(){
   pintarRuta(); pintarTasas();
 });
 
-/* ---- Lectura de tasas ---- */
+/* ---- Lectura de tasas (archivo tasas.json del repositorio) ---- */
 function cargarTasas(){
-  if(!CONFIG.BIN_ID) return;
-  fetch('https://api.jsonbin.io/v3/b/'+CONFIG.BIN_ID+'/latest', {
-    headers: { 'X-Master-Key': CONFIG.MASTER_KEY }
+  fetch('https://api.github.com/repos/' + CONFIG.REPO + '/contents/tasas.json', {
+    headers: { 'Accept': 'application/vnd.github.raw+json' }
   })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      var r = d.record; if(!r) return;
+    .then(function(r){ if(!r.ok) throw new Error('x'); return r.json(); })
+    .then(function(r){
       TASA_USD_VES = r.USD_VES || TASA_USD_VES;
       TASA_BR_VE = r.BR_VE || TASA_BR_VE;
       TASA_VE_BR = r.VE_BR || TASA_VE_BR;
@@ -321,44 +297,9 @@ function cargarTasas(){
     .catch(function(){ $('actualizado').textContent = 'No se pudo actualizar la tasa. Confirma el monto por WhatsApp.'; });
 }
 
-/* ---- Panel de administrador ---- */
-function msgAdmin(t, err){ var m=$('adminMsg'); m.textContent=t; m.className='msg'+(err?' err':''); }
-$('logo').addEventListener('click', function(){
-  $('inDolar').value = TASA_USD_VES; $('inBR').value = TASA_BR_VE; $('inVE').value = TASA_VE_BR; $('inClave').value='';
-  msgAdmin(''); $('modalAdmin').classList.add('on'); $('inClave').focus();
-});
-$('btnCerrar').addEventListener('click', function(){ $('modalAdmin').classList.remove('on'); });
-
-$('btnGuardar').addEventListener('click', function(){
-  var d = parseFloat($('inDolar').value), b = parseFloat($('inBR').value), v = parseFloat($('inVE').value), clave = $('inClave').value;
-  if(!(d>0 && b>0 && v>0)) return msgAdmin('Escribe montos válidos en las tres tasas.', true);
-  if(!clave) return msgAdmin('Escribe la clave de administrador.', true);
-  if(clave !== CONFIG.CLAVE_ADMIN) return msgAdmin('Clave incorrecta.', true);
-
-  msgAdmin('Guardando en la nube...');
-
-  var fechaIso = new Date().toISOString();
-  var datosNuevos = { USD_VES: d, BR_VE: b, VE_BR: v, ACTUALIZADO: fechaIso };
-
-  fetch('https://api.jsonbin.io/v3/b/' + CONFIG.BIN_ID, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.MASTER_KEY },
-    body: JSON.stringify(datosNuevos)
-  })
-  .then(function(r){ if(!r.ok) throw new Error('red'); return r.json(); })
-  .then(function(){
-    TASA_USD_VES = d; TASA_BR_VE = b; TASA_VE_BR = v; actualizado = fechaIso;
-    pintarTasas();
-    $('modalAdmin').classList.remove('on');
-    alert('¡Tasas actualizadas globalmente con éxito!');
-  })
-  .catch(function(){
-    msgAdmin('No se pudo guardar en la nube. Revisa tu conexión.', true);
-  });
-});
-
 pintarRuta(); pintarTasas(); cargarTasas();
 actualizarEstado(); setInterval(actualizarEstado, 60000);
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js'); }
 </script>
 </body>
 </html>
