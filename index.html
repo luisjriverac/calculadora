@@ -286,7 +286,6 @@ function recalcular(){
     moneda='BRL'; extra = formato(ves) + ' VES';
     if(modo==='USD_ENV'){
       principal = Math.round(ves/TASA_BR_VE*100)/100;
-      ves = principal*TASA_BR_VE; extra = formato(ves) + ' VES';
       texto = 'Hola, quiero que lleguen US$ ' + formato(monto) + ' a Venezuela. Debo enviar R$ ' + formato(principal) + '.';
     } else {
       principal = ves/TASA_VE_BR;
