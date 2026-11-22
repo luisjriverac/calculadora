@@ -121,7 +121,7 @@ label.campo{display:block;color:var(--suave);font-size:12px;font-weight:600;marg
       <button type="button" class="tab on" data-tab="tasa" role="tab">Reales y Bs.</button>
       <button type="button" class="tab" data-tab="usd" role="tab">En dólares</button>
     </div>
-    <h2 class="elegir-t" id="tituloElegir">Elige tu tasa</h2>
+    <h2 class="elegir-t" id="tituloElegir">Selecciona tu Ruta de Envios</h2>
     <div class="opciones" id="opciones" role="radiogroup" aria-label="Elije tu tasa">
       <button type="button" class="opcion on" data-modo="BR" role="radio" aria-checked="true">
         <span class="radio"></span>
@@ -220,7 +220,7 @@ function pintarRuta(){
   $('banTEN').innerHTML = BANDERA_VE + FLECHA + BANDERA_BR;
   var u = esUsd();
   $('opciones').hidden = u; $('opcionesUsd').hidden = !u;
-  $('tituloElegir').textContent = u ? 'Elige tu cálculo' : 'Elige tu tasa';
+  $('tituloElegir').textContent = u ? 'Selecciona tu envio en Dolares' : 'Selecciona tu envio';
   document.querySelectorAll('.tab').forEach(function(t){
     var on = (t.getAttribute('data-tab')==='usd') === u;
     t.classList.toggle('on', on); t.setAttribute('aria-selected', on ? 'true' : 'false');
